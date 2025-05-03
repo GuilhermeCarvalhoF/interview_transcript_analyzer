@@ -26,7 +26,7 @@ def summarize_text(transcript: str) -> str:
     decisions = []
     actions = []
 
-    # Keywords for categorizing sentences
+
     action_keywords = [
         "will", "assigned", "responsible", "needs to", "task", "follow up", "due",
         "to-do", "scheduled", "submit", "send", "deliver", "complete", "prepare",
@@ -51,12 +51,4 @@ def summarize_text(transcript: str) -> str:
     def bullet(lines):
         return '\n'.join(f"- {line}" for line in lines) if lines else "- (none found)"
 
-    return f"""### 📝 Summary
-{bullet(summary_points)}
-
-### 📌 Key Decisions
-{bullet(decisions)}
-
-### ✅ Action Items
-{bullet(actions)}
-"""
+    return bullet(summary_points)

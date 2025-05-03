@@ -30,14 +30,12 @@ if uploaded_file is not None:
 
     st.audio(uploaded_file, format="audio/mp3")
 
-    # Transcription
     with st.spinner("🔍 Transcribing audio..."):
         transcript = transcriptor(temp_path)
 
     st.subheader("📜 Transcript")
     st.markdown(transcript)
 
-    # Summary & Info Extraction
     if st.button("🧠 Analyze Interview"):
         with st.spinner("Analyzing content..."):
             summary = summarize_text(transcript)
