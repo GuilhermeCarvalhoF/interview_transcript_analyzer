@@ -13,7 +13,7 @@ from backend.summarizer import summarize_text
 st.title("Audio Transcriber")
 st.subheader("Upload your audio file")
 
-uploaded_file = st.file_uploader("Choose an audio file", type=["mp3", "wav", "m4a"])
+uploaded_file = st.file_uploader("Choose an audio file", type=["mp3", "wav", "m4a", "ogg"])
 if uploaded_file:
     st.audio(uploaded_file)
     with st.spinner("Generating transcription..."):
