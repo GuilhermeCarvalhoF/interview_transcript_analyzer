@@ -15,11 +15,6 @@ model = whisper.load_model("small")
 ## functions
 ###########
 
-def transcriptor(file):
-    with tempfile.NamedTemporaryFile(delete=False) as temp:
-        temp.write(file.read())
-        temp.flush()
-        temp_path = temp.name
-    result = model.transcribe(temp_path)
-    os.remove(temp_path)
+def transcriptor(file_path):
+    result = model.transcribe(file_path)
     return result["text"]
