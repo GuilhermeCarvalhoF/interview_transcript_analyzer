@@ -19,7 +19,44 @@ def summarize_text(transcript: str) -> str:
     summary = summarizer(transcript, max_length=150, min_length=40, do_sample=False)
     summary_text = summary[0]["summary_text"]
 
-    bullet_points = summary_text.split(". ")
-    bullet_points = [f"- {point.strip().rstrip('.')}" for point in bullet_points if point.strip()]
+    sentences = summary_text.split('. ')
+    sentences = [s.strip().rstrip('.') for s in sentences if s.strip()]
 
-    return '\n'.join(bullet_points)
+    summary_points = []
+    decisions = []
+    actions = []
+
+    # Keywords for categorizing sentences
+    action_keywords = [
+        "will", "assigned", "responsible", "needs to", "task", "follow up", "due",
+        "to-do", "scheduled", "submit", "send", "deliver", "complete", "prepare",
+        "required", "must", "should", "deadline", "action", "finalize", "implement", "coordinate"
+    ]
+
+    decision_keywords = [
+        "decided", "agreed", "approved", "concluded", "confirmed", "chosen", "voted",
+        "selected", "resolved", "final decision", "consensus", "reached an agreement",
+        "settled", "opted", "plan is to", "will proceed with"
+    ]
+
+    for sentence in sentences:
+        s_lower = sentence.lower()
+        if any(kw in s_lower for kw in action_keywords):
+            actions.append(sentence)
+        elif any(kw in s_lower for kw in decision_keywords):
+            decisions.append(sentence)
+        else:
+            summary_points.append(sentence)
+
+    def bullet(lines):
+        return '\n'.join(f"- {line}" for line in lines) if lines else "- (none found)"
+
+    return f"""### 📝 Summary
+{bullet(summary_points)}
+
+### 📌 Key Decisions
+{bullet(decisions)}
+
+### ✅ Action Items
+{bullet(actions)}
+"""

@@ -20,6 +20,6 @@ if uploaded_file:
         transcription = transcriptor(uploaded_file)
         summary = summarize_text(transcription)
     st.subheader("Transcription")
-    st.write(transcription)
+    st.markdown(transcription)
     st.subheader("Summary:")
-    st.write(summary)
+    st.markdown(summary)
