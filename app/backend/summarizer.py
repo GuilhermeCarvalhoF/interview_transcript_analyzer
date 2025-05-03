@@ -17,4 +17,9 @@ def summarize_text(transcript: str) -> str:
     if len(transcript) > 3000:
         transcript = transcript[:3000]
     summary = summarizer(transcript, max_length=150, min_length=40, do_sample=False)
-    return summary[0]["summary_text"]
+    summary_text = summary[0]["summary_text"]
+
+    bullet_points = summary_text.split(". ")
+    bullet_points = [f"- {point.strip().rstrip('.')}" for point in bullet_points if point.strip()]
+
+    return '\n'.join(bullet_points)
