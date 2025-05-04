@@ -6,6 +6,8 @@ import streamlit as st
 from backend.transcriber import transcriptor
 from backend.summarizer import summarize_text
 from backend.interview_parser import extract_elements
+from fpdf import FPDF
+from io import BytesIO
 import tempfile
 
 ##########
@@ -44,6 +46,12 @@ st.markdown("""
 
 st.title("🎙️ Interview Transcript Analyzer")
 st.markdown("Upload an interview recording and extract a summary, skills, tools, and candidate experience.")
+
+##########
+## pdf file
+##########
+
+
 
 ##########
 # File Upload
@@ -91,28 +99,81 @@ if uploaded_file is not None:
                 st.markdown("- None found")
 
         ##########
+        ## pdf file
+        ##########
+
+        def create_pdf(summary, details, transcript):
+            pdf = FPDF()
+            pdf.add_page()
+            pdf.set_auto_page_break(auto=True, margin=15)
+            pdf.set_font("Arial", 'B', 16)
+            pdf.cell(0, 10, "Interview Report", ln=True)
+
+            pdf.set_font("Arial", '', 12)
+            pdf.ln(10)
+
+            pdf.set_font("Arial", 'B', 14)
+            pdf.cell(0, 10, "Summary", ln=True)
+            pdf.set_font("Arial", '', 12)
+            for line in summary.strip().split('\n'):
+                pdf.multi_cell(0, 8, line)
+            pdf.ln(5)
+
+            pdf.set_font("Arial", 'B', 14)
+            pdf.cell(0, 10, "Skills Mentioned", ln=True)
+            pdf.set_font("Arial", '', 12)
+            skills = ', '.join(details['skills']) or 'None'
+            pdf.multi_cell(0, 8, skills)
+            pdf.ln(5)
+
+            pdf.set_font("Arial", 'B', 14)
+            pdf.cell(0, 10, "Tools & Technologies", ln=True)
+            pdf.set_font("Arial", '', 12)
+            tools = ', '.join(details['tools']) or 'None'
+            pdf.multi_cell(0, 8, tools)
+            pdf.ln(5)
+
+            pdf.set_font("Arial", 'B', 14)
+            pdf.cell(0, 10, "Experience Mentions", ln=True)
+            pdf.set_font("Arial", '', 12)
+            if details['experience_phrases']:
+                for phrase in details['experience_phrases']:
+                    pdf.multi_cell(0, 8, f"- {phrase}")
+            else:
+                pdf.multi_cell(0, 8, "- None found")
+            pdf.ln(5)
+
+            pdf.set_font("Arial", 'B', 14)
+            pdf.cell(0, 10, "Full Transcript", ln=True)
+            pdf.set_font("Arial", '', 12)
+            pdf.multi_cell(0, 8, transcript)
+
+            pdf.set_y(-15)
+            pdf.set_font("Arial", "I", 10)
+            pdf.set_text_color(150)
+            pdf.cell(0, 10, "Developed by Guilherme Fernandez", 0, 0, "C")
+
+            buffer = BytesIO()
+            pdf_bytes = pdf.output(dest='S').encode('latin1') # This change was necessary in order to include latin origin characters
+            buffer.write(pdf_bytes)
+            buffer.seek(0)
+            return buffer
+
+        pdf_buffer = create_pdf(summary, details, transcript)
+
+
+        ##########
         # Download report
         ##########
 
-        st.subheader("📥 Download Full Report")
-
-        report_content = f"""
-Interview Summary:
-{summary}
-
-Skills Mentioned: {', '.join(details['skills']) or 'None'}
-Tools/Technologies: {', '.join(details['tools']) or 'None'}
-
-Experience Mentions:
-{chr(10).join(['- ' + xp for xp in details['experience_phrases']]) or '- None found'}
-
-Full Transcript:
-{transcript}
-"""
-
         st.download_button(
-            label="💾 Download Report as .pdf",
-            data=report_content,
+            label="💾 Download Report as PDF",
+            data=pdf_buffer,
             file_name="interview_report.pdf",
-            mime="text/plain"
+            mime="application/pdf"
         )
+
+st.markdown(
+    "<hr style='margin-top: 50px;'><div style='text-align: center; color: gray;'>Developed by Guilherme Fernandez</div>",
+    unsafe_allow_html=True
+)
