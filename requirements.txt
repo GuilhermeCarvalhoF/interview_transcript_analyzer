@@ -6,6 +6,3 @@ transformers
 sentencepiece
 fpdf
 spacy
-tempfile
-re
-en-core-web-sm
