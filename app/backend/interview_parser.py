@@ -4,17 +4,15 @@
 
 import re
 import spacy
-import subprocess
+from pathlib import Path
 
 
 ###########
 ## spacy model
 ###########
-try:
-    nlp = spacy.load("en_core_web_sm")
-except OSError:
-    subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
-    nlp = spacy.load("en_core_web_sm")
+
+model_path = Path(__file__).parent / "en_core_web_sm"
+nlp = spacy.load(model_path)
 
 ############
 ## keywords
