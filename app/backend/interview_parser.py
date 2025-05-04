@@ -10,7 +10,7 @@ from pathlib import Path
 ## spacy model
 ###########
 
-model_path = Path(__file__).parent / "en_core_web_sm"
+model_path = Path(__file__).parent / "en_core_web_sm/en_core_web_sm-3.8.0"
 nlp = spacy.load(model_path)
 
 ############
