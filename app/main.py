@@ -47,11 +47,6 @@ st.markdown("""
 st.title("🎙️ Interview Transcript Analyzer")
 st.markdown("Upload an interview recording and extract a summary, skills, tools, and candidate experience.")
 
-##########
-## pdf file
-##########
-
-
 
 ##########
 # File Upload
