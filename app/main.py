@@ -9,6 +9,18 @@ from backend.interview_parser import extract_elements
 from fpdf import FPDF
 from io import BytesIO
 import tempfile
+import spacy
+import subprocess
+
+##########
+## Load NLP model
+##########
+
+try:
+    nlp = spacy.load("en_core_web_sm")
+except OSError:
+    subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
+    nlp = spacy.load("en_core_web_sm")
 
 ##########
 # Page Config & Styling
