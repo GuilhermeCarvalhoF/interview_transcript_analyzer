@@ -5,3 +5,6 @@ ffmpeg-python
 transformers
 sentencepiece
 fpdf
+spacy
+tempfile
+re
