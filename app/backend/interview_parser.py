@@ -4,12 +4,14 @@
 
 import re
 import spacy
-
+from pathlib import Path
 
 ###########
 ## spacy model
 ###########
-nlp = spacy.load("en_core_web_sm")
+
+model_path = Path(__file__).parent / "en_core_web_sm"
+nlp = spacy.load(model_path)
 
 ############
 ## keywords

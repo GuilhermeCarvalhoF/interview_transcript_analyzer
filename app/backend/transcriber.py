@@ -9,7 +9,7 @@ import os
 ############
 ## model
 ############
-model = whisper.load_model("base")
+model = whisper.load_model("small")
 
 ###########
 ## functions
