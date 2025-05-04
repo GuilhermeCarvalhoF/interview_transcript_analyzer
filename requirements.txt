@@ -1,6 +1,7 @@
 streamlit
-git+https://github.com/openai/whisper.git
+whisper
 torch
+ffmpeg-python
 transformers
 sentencepiece
 fpdf
